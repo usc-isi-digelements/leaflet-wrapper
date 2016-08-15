@@ -1,0 +1,181 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../leaflet-map/leaflet-map.html">
+
+<!--
+A polymer web component that wraps a leaflet-map.
+
+Example:
+
+        <leaflet-wrapper
+          data="[[array]]">
+        </leaflet-wrapper>
+
+@demo demo/index.html
+-->
+
+<dom-module id="leaflet-wrapper">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      leaflet-map {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+      }
+
+      .leaflet-container .leaflet-control-attribution{
+        opacity: 0.5;
+        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .leaflet-container .leaflet-control-attribution:hover{
+        opacity: 1;
+      }
+
+      .leaflet-bar {
+        box-shadow:
+          1px 2px 3px 0 rgba(0, 0, 0, 0.14),
+          1px 1px 6px 0 rgba(0, 0, 0, 0.12),
+          1px 3px 2px -2px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+      }
+
+      .leaflet-bar a,
+      .leaflet-bar a:hover {
+        color: var(--secondary-text-color);
+      }
+
+      .leaflet-bar a:first-child {
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+      }
+
+      .leaflet-bar a:last-child {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+      }
+    </style>
+
+    <!-- Need the if/else case since fit-to-markers attribute won't work properly with only one marker/location -->
+    <template is="dom-if" if="{{hasMultipleLocations}}">
+      <leaflet-map fit-to-markers>
+        <template is="dom-repeat" items="{{data}}" as="location">
+          <leaflet-marker latitude="[[getProperty(location, latitudeProperty)]]" longitude="[[getProperty(location, longitudeProperty)]]" title$="[[getProperty(location, textProperty, '')]]">
+            [[getProperty(location, textProperty)]]
+          </leaflet-marker>
+        </template>
+      </leaflet-map>
+    </template>
+    <template is="dom-if" if="{{hasSingleLocation}}">
+      <leaflet-map latitude="[[getSingleLocationProperty(latitudeProperty)]]" longitude="[[getSingleLocationProperty(longitudeProperty)]]" zoom="10">
+        <leaflet-marker latitude="[[getSingleLocationProperty(latitudeProperty)]]" longitude="[[getSingleLocationProperty(longitudeProperty)]]" title$="[[getSingleLocationProperty(textProperty, '')]]">
+          [[getSingleLocationProperty(textProperty))]]
+        </leaflet-marker>
+      </leaflet-map>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      /* globals L */
+      is: 'leaflet-wrapper',
+
+      properties: {
+        /**
+         * The latitude property in the map data.
+         */
+        latitudeProperty: {
+          type: String,
+          value: 'latitude'
+        },
+
+        /**
+         * The longitude property in the map data.
+         */
+        longitudeProperty: {
+          type: String,
+          value: 'longitude'
+        },
+
+        /**
+         * The text property in the map data.
+         */
+        textProperty: {
+          type: String,
+          value: 'text'
+        },
+
+        /**
+         * The data for the map.
+         */
+        data: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+          notify: true,
+          observer: 'onDataChange'
+        },
+
+        /**
+         * Whether the map has multiple locations.
+         */
+        hasMultipleLocations: {
+          type: Boolean,
+          value: false,
+          readOnly: true
+        },
+
+        /**
+         * Whether the map has a single location.
+         */
+        hasSingleLocation: {
+          type: Boolean,
+          value: false,
+          readOnly: true
+        }
+      },
+
+      ready: function() {
+        // open issue for leaflet-map: https://github.com/leaflet-extras/leaflet-map/issues/15
+        // if imagePath for leaflet-map icons cannot be detected, manually set it here:
+        if(!L.Icon.Default.imagePath) {
+          L.Icon.Default.imagePath = 'bower_components/leaflet/dist/images';
+        }
+      },
+
+      /**
+       * Sets whether the data has a single or multiple locations whenever the data changes.
+       */
+      onDataChange: function() {
+        this._setHasMultipleLocations(this.data && this.data.length > 1);
+        this._setHasSingleLocation(this.data && this.data.length === 1);
+      },
+
+      /**
+       * Returns the given property in the given item.
+       */
+      getProperty: function(item, property, defaultValue) {
+        return item[property] || defaultValue;
+      },
+
+      /**
+       * Returns the given property in the single item in the data.
+       */
+      getSingleLocationProperty: function(property, defaultValue) {
+        return this.getProperty(this.data[0], property, defaultValue);
+      }
+    });
+  })();
+  </script>
+</dom-module>
