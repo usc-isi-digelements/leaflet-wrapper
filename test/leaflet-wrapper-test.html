@@ -50,20 +50,22 @@
         expect(component.latitudeProperty).to.equal('latitude');
         expect(component.longitudeProperty).to.equal('longitude');
         expect(component.textProperty).to.equal('text');
+        expect(component.tileType).to.be.a('String');
+        expect(component.tileUrl).to.be.a('String');
       });
 
-      it('hasMultipleLocations and hasSingleLocation are set to correct values', function() {
-        expect(component.hasMultipleLocations).to.be.equal(true);
-        expect(component.hasSingleLocation).to.be.equal(false);
+      it('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
+        expect(component._hasMultipleLocations).to.be.equal(true);
+        expect(component._hasSingleLocation).to.be.equal(false);
       });
 
-      it('getProperty returns the correct values', function() {
-        expect(component.getProperty(component.data[0], component.latitudeProperty)).to.equal(32.71);
-        expect(component.getProperty(component.data[0], component.longitudeProperty)).to.equal(-117.16);
-        expect(component.getProperty(component.data[0], component.textProperty)).to.equal('myText');
-        expect(component.getProperty(component.data[1], component.latitudeProperty)).to.equal(34.05);
-        expect(component.getProperty(component.data[1], component.longitudeProperty)).to.equal(-118.25);
-        expect(component.getProperty(component.data[1], component.textProperty)).to.not.exist;
+      it('_getProperty returns the correct values', function() {
+        expect(component._getProperty(0, component.latitudeProperty)).to.equal(32.71);
+        expect(component._getProperty(0, component.longitudeProperty)).to.equal(-117.16);
+        expect(component._getProperty(0, component.textProperty)).to.equal('myText');
+        expect(component._getProperty(1, component.latitudeProperty)).to.equal(34.05);
+        expect(component._getProperty(1, component.longitudeProperty)).to.equal(-118.25);
+        expect(component._getProperty(1, component.textProperty)).to.not.exist;
       });
     });
 
@@ -98,17 +100,19 @@
         expect(component.longitudeProperty).to.equal('x');
         expect(component.latitudeProperty).to.equal('y');
         expect(component.textProperty).to.equal('name');
+        expect(component.tileType).to.be.a('String');
+        expect(component.tileUrl).to.be.a('String');
       });
 
-      it('hasMultipleLocations and hasSingleLocation are set to correct values', function() {
-        expect(component.hasMultipleLocations).to.be.equal(false);
-        expect(component.hasSingleLocation).to.be.equal(true);
+      it('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
+        expect(component._hasMultipleLocations).to.be.equal(false);
+        expect(component._hasSingleLocation).to.be.equal(true);
       });
 
-      it('getProperty returns the correct values', function() {
-        expect(component.getSingleLocationProperty(component.latitudeProperty)).to.equal(32.71);
-        expect(component.getSingleLocationProperty(component.longitudeProperty)).to.equal(-117.16);
-        expect(component.getSingleLocationProperty(component.textProperty)).to.equal('myName');
+      it('_getProperty returns the correct values', function() {
+        expect(component._getProperty(0, component.latitudeProperty)).to.equal(32.71);
+        expect(component._getProperty(0, component.longitudeProperty)).to.equal(-117.16);
+        expect(component._getProperty(0, component.textProperty)).to.equal('myName');
       });
     });
   </script>
