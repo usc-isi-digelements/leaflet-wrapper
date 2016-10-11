@@ -61,6 +61,44 @@ Example:
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
       }
+
+      paper-menu-button {
+        padding: 0;
+        position: absolute;
+        right: 0;
+        margin-top: 10px;
+        margin-right: 10px;
+      }
+
+      paper-icon-button {
+        --paper-icon-button: {
+          padding: 6px;
+          height: 30px;
+          width: 30px;
+        };
+        background: white;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 2px;
+      }
+
+      paper-icon-button::shadow #icon {
+        height: 16px;
+        width: 16px;
+      }
+
+      paper-menu {
+        padding: 0;
+      }
+
+      paper-item:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      paper-radio-button {
+        --paper-radio-button-size: 10px;
+        display: block;
+      }
     </style>
 
     <!-- Need the if/else case since fit-to-markers attribute won't work properly with only one marker/location -->
@@ -73,14 +111,35 @@ Example:
         </template>
       </leaflet-map>
     </template>
+
     <template is="dom-if" if="{{hasSingleLocation}}">
       <leaflet-map latitude="[[getSingleLocationProperty(latitudeProperty)]]" longitude="[[getSingleLocationProperty(longitudeProperty)]]" zoom="10">
+        <!-- Combine the attribution for all tile layers because changing the attribution property dynamically does not update the text. -->
+        <leaflet-tilelayer
+          url="[[tileUrl]]"
+          attribution='CartoDB Positron &copy; <a href="http://cartodb.com/attributions">CartoDB</a>, Hydda tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a>, OpenMapSurfer imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a>, OpenStreetMap data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          nowrap>
+        </leaflet-tilelayer>
+
         <leaflet-marker latitude="[[getSingleLocationProperty(latitudeProperty)]]" longitude="[[getSingleLocationProperty(longitudeProperty)]]" title$="[[getSingleLocationProperty(textProperty, '')]]">
           [[getSingleLocationProperty(textProperty)]]
         </leaflet-marker>
       </leaflet-map>
     </template>
+
+    <paper-menu-button horizontal-align="right">
+      <paper-icon-button icon="maps:layers" class="dropdown-trigger"></paper-icon-button>
+      <paper-menu class="dropdown-content">
+        <paper-radio-group selected="{{tileType}}">
+          <paper-radio-button name="Positron">CartoDB Positron</paper-radio-button>
+          <paper-radio-button name="Hydda">Hydda</paper-radio-button>
+          <paper-radio-button name="OpenMapSurfer">OpenMapSurfer</paper-radio-button>
+          <paper-radio-button name="OpenStreetMap">OpenStreetMap</paper-radio-button>
+        </paper-radio-group>
+      </paper-menu>
+    </paper-menu-button>
   </template>
+
 
   <script>
   (function() {
@@ -143,6 +202,18 @@ Example:
           type: Boolean,
           value: false,
           readOnly: true
+        },
+
+        tileType: {
+          type: String,
+          value: 'OpenMapSurfer',
+          observer: '_onTileChange'
+        },
+
+        tileUrl: {
+          type: String,
+          notify: true,
+          value: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'
         }
       },
 
@@ -160,6 +231,21 @@ Example:
       onDataChange: function() {
         this._setHasMultipleLocations(this.data && this.data.length > 1);
         this._setHasSingleLocation(this.data && this.data.length === 1);
+      },
+
+      _onTileChange: function() {
+        if(this.tileType === 'Hydda') {
+          this.tileUrl = 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png';
+        }
+        if(this.tileType === 'OpenMapSurfer') {
+          this.tileUrl = 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}';
+        }
+        if(this.tileType === 'OpenStreetMap') {
+          this.tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        }
+        if(this.tileType === 'Positron') {
+          this.tileUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+        }
       },
 
       /**
