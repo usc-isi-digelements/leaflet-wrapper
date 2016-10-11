@@ -1,5 +1,11 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icons/maps-icons.html">
 <link rel="import" href="../leaflet-map/leaflet-map.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../paper-radio-group/paper-radio-group.html">
 
 <!--
 A polymer web component that wraps a leaflet-map.
@@ -65,6 +71,7 @@ Example:
       paper-menu-button {
         padding: 0;
         position: absolute;
+        top: 0;
         right: 0;
         margin-top: 10px;
         margin-right: 10px;
@@ -90,11 +97,6 @@ Example:
         padding: 0;
       }
 
-      paper-item:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-      }
-
       paper-radio-button {
         --paper-radio-button-size: 10px;
         display: block;
@@ -104,6 +106,12 @@ Example:
     <!-- Need the if/else case since fit-to-markers attribute won't work properly with only one marker/location -->
     <template is="dom-if" if="{{_hasMultipleLocations}}">
       <leaflet-map fit-to-markers>
+        <leaflet-tilelayer
+          url="[[tileUrl]]"
+          attribution="[[tileAttribution]]"
+          nowrap>
+        </leaflet-tilelayer>
+
         <template is="dom-repeat" items="{{data}}" as="location">
           <leaflet-marker latitude="[[_getProperty(index, latitudeProperty)]]" longitude="[[_getProperty(index, longitudeProperty)]]" title$="[[_getProperty(index, textProperty, '')]]">
             [[_getProperty(index, textProperty)]]
@@ -114,10 +122,9 @@ Example:
 
     <template is="dom-if" if="{{_hasSingleLocation}}">
       <leaflet-map latitude="[[_getProperty(0, latitudeProperty)]]" longitude="[[_getProperty(0, longitudeProperty)]]" zoom="10">
-        <!-- Combine the attribution for all tile layers because changing the attribution property dynamically does not update the text. -->
         <leaflet-tilelayer
           url="[[tileUrl]]"
-          attribution='CartoDB Positron &copy; <a href="http://cartodb.com/attributions">CartoDB</a>, Hydda tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a>, OpenMapSurfer imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a>, OpenStreetMap data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution="[[tileAttribution]]"
           nowrap>
         </leaflet-tilelayer>
 
@@ -127,7 +134,7 @@ Example:
       </leaflet-map>
     </template>
 
-    <paper-menu-button horizontal-align="right">
+    <paper-menu-button horizontal-align="right" title="Select Base Map Layer">
       <paper-icon-button icon="maps:layers" class="dropdown-trigger"></paper-icon-button>
       <paper-menu class="dropdown-content">
         <paper-radio-group selected="{{tileType}}">
@@ -135,6 +142,7 @@ Example:
           <paper-radio-button name="Hydda">Hydda</paper-radio-button>
           <paper-radio-button name="OpenMapSurfer">OpenMapSurfer</paper-radio-button>
           <paper-radio-button name="OpenStreetMap">OpenStreetMap</paper-radio-button>
+          <paper-radio-button name="Stamen">Stamen</paper-radio-button>
         </paper-radio-group>
       </paper-menu>
     </paper-menu-button>
@@ -184,6 +192,15 @@ Example:
           },
           notify: true,
           observer: '_onDataChange'
+        },
+
+        /**
+         * The attribution of the base tile layer.  Note that we combine the attribution for all available tile layers
+         * because the polymer leaflet-map library does not update the visible attribution as the property changes.
+         */
+        tileAttribution: {
+          type: String,
+          value: 'CartoDB Positron &copy; <a href="http://cartodb.com/attributions">CartoDB</a>, Hydda tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a>, OpenMapSurfer imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a>, Stamen map tiles by <a href="http://stamen.com">Stamen Design</a>, OpenStreetMap data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         },
 
         /**
@@ -251,6 +268,9 @@ Example:
         }
         if(this.tileType === 'Positron') {
           this.tileUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+        }
+        if(this.tileType === 'Stamen') {
+          this.tileUrl = 'http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png';
         }
       },
 
