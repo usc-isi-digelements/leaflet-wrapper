@@ -1,6 +1,6 @@
 # leaflet-wrapper
 
-A polymer web component that wraps a leaflet-map.
+A polymer web component that wraps a [leaflet-map](https://github.com/leaflet-extras/leaflet-map).
 
 Example:
 ```html
