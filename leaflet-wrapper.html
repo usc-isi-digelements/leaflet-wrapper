@@ -8,13 +8,11 @@
 <link rel="import" href="../paper-radio-group/paper-radio-group.html">
 
 <!--
-A polymer web component that wraps a leaflet-map.
+A Polymer Element that wraps a leaflet-map.
 
-Example:
+### Example
 
-        <leaflet-wrapper
-          data="[[array]]">
-        </leaflet-wrapper>
+    <leaflet-wrapper data="[[array]]"></leaflet-wrapper>
 
 @demo demo/index.html
 -->
@@ -160,6 +158,9 @@ Example:
       properties: {
         /**
          * The latitude property in the map data.
+         *
+         * @type {String}
+         * @default 'latitude'
          */
         latitudeProperty: {
           type: String,
@@ -168,6 +169,9 @@ Example:
 
         /**
          * The longitude property in the map data.
+         *
+         * @type {String}
+         * @default 'longitude'
          */
         longitudeProperty: {
           type: String,
@@ -176,6 +180,9 @@ Example:
 
         /**
          * The text property in the map data.
+         *
+         * @type {String}
+         * @default 'text'
          */
         textProperty: {
           type: String,
@@ -184,6 +191,9 @@ Example:
 
         /**
          * The data for the map.
+         *
+         * @type {Array}
+         * @default []
          */
         data: {
           type: Array,
@@ -197,6 +207,9 @@ Example:
         /**
          * The attribution of the base tile layer.  Note that we combine the attribution for all available tile layers
          * because the polymer leaflet-map library does not update the visible attribution as the property changes.
+         *
+         * @type {String}
+         * @default 'CartoDB Positron &copy; <a href="http://cartodb.com/attributions">CartoDB</a>, Hydda tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a>, OpenMapSurfer imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a>, Stamen map tiles by <a href="http://stamen.com">Stamen Design</a>, OpenStreetMap data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
          */
         tileAttribution: {
           type: String,
@@ -205,6 +218,9 @@ Example:
 
         /**
          * The type of the base tile layer.
+         *
+         * @type {String}
+         * @default 'OpenMapSurfer'
          */
         tileType: {
           type: String,
@@ -214,6 +230,9 @@ Example:
 
         /**
          * The URL of the base tile layer.
+         *
+         * @type {String}
+         * @default 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'
          */
         tileUrl: {
           type: String,
@@ -223,6 +242,10 @@ Example:
 
         /**
          * Whether the map has multiple locations.
+         *
+         * @type {Boolean}
+         * @default false
+         * @private
          */
         _hasMultipleLocations: {
           type: Boolean,
@@ -232,6 +255,10 @@ Example:
 
         /**
          * Whether the map has a single location.
+         *
+         * @type {Boolean}
+         * @default false
+         * @private
          */
         _hasSingleLocation: {
           type: Boolean,
@@ -250,12 +277,19 @@ Example:
 
       /**
        * Sets whether the data has a single or multiple locations whenever the data changes.
+       *
+       * @private
        */
       _onDataChange: function() {
         this._set_hasMultipleLocations(this.data && this.data.length > 1);
         this._set_hasSingleLocation(this.data && this.data.length === 1);
       },
 
+      /**
+       * Changes the map tile.
+       *
+       * @private
+       */
       _onTileChange: function() {
         if(this.tileType === 'Hydda') {
           this.tileUrl = 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png';
@@ -275,7 +309,13 @@ Example:
       },
 
       /**
-       * Returns the given property in the data at the given index.
+       * Returns the given property in the data at the given index or the given default value if the object's property is empty.
+       *
+       * @param {Number} index
+       * @param {String} property
+       * @param defaultValue
+       * @return
+       * @private
        */
       _getProperty: function(index, property, defaultValue) {
         return this.data[index][property] || defaultValue;

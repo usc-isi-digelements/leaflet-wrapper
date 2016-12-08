@@ -17,11 +17,11 @@
 
   <script>
     describe('leaflet-wrapper test -- if more than one location', function() {
-      var component;
+      var element;
 
       before(function(done) {
-        component = fixture('leaflet-wrapper-fixture');
-        component.data = [{
+        element = fixture('leaflet-wrapper-fixture');
+        element.data = [{
           latitude: 32.71,
           longitude: -117.16,
           text: 'myText'
@@ -35,8 +35,8 @@
       });
 
       it('data is set to input value', function() {
-        expect(component.data).to.be.an('Array');
-        expect(component.data).to.be.deep.equal([{
+        expect(element.data).to.be.an('Array');
+        expect(element.data).to.be.deep.equal([{
           latitude: 32.71,
           longitude: -117.16,
           text: 'myText'
@@ -47,37 +47,37 @@
       });
 
       it('other properties are set to default values', function() {
-        expect(component.latitudeProperty).to.equal('latitude');
-        expect(component.longitudeProperty).to.equal('longitude');
-        expect(component.textProperty).to.equal('text');
-        expect(component.tileType).to.be.a('String');
-        expect(component.tileUrl).to.be.a('String');
+        expect(element.latitudeProperty).to.equal('latitude');
+        expect(element.longitudeProperty).to.equal('longitude');
+        expect(element.textProperty).to.equal('text');
+        expect(element.tileType).to.be.a('String');
+        expect(element.tileUrl).to.be.a('String');
       });
 
       it('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
-        expect(component._hasMultipleLocations).to.be.equal(true);
-        expect(component._hasSingleLocation).to.be.equal(false);
+        expect(element._hasMultipleLocations).to.be.equal(true);
+        expect(element._hasSingleLocation).to.be.equal(false);
       });
 
       it('_getProperty returns the correct values', function() {
-        expect(component._getProperty(0, component.latitudeProperty)).to.equal(32.71);
-        expect(component._getProperty(0, component.longitudeProperty)).to.equal(-117.16);
-        expect(component._getProperty(0, component.textProperty)).to.equal('myText');
-        expect(component._getProperty(1, component.latitudeProperty)).to.equal(34.05);
-        expect(component._getProperty(1, component.longitudeProperty)).to.equal(-118.25);
-        expect(component._getProperty(1, component.textProperty)).to.not.exist;
+        expect(element._getProperty(0, element.latitudeProperty)).to.equal(32.71);
+        expect(element._getProperty(0, element.longitudeProperty)).to.equal(-117.16);
+        expect(element._getProperty(0, element.textProperty)).to.equal('myText');
+        expect(element._getProperty(1, element.latitudeProperty)).to.equal(34.05);
+        expect(element._getProperty(1, element.longitudeProperty)).to.equal(-118.25);
+        expect(element._getProperty(1, element.textProperty)).to.not.exist;
       });
     });
 
     describe('leaflet-wrapper test -- if one location', function() {
-      var component;
+      var element;
 
       before(function(done) {
-        component = fixture('leaflet-wrapper-fixture');
-        component.longitudeProperty = 'x';
-        component.latitudeProperty = 'y';
-        component.textProperty = 'name';
-        component.data = [{
+        element = fixture('leaflet-wrapper-fixture');
+        element.longitudeProperty = 'x';
+        element.latitudeProperty = 'y';
+        element.textProperty = 'name';
+        element.data = [{
           x: -117.16,
           y: 32.71,
           name: 'myName'
@@ -88,8 +88,8 @@
       });
 
       it('data is set to input value', function() {
-        expect(component.data).to.be.an('Array');
-        expect(component.data).to.be.deep.equal([{
+        expect(element.data).to.be.an('Array');
+        expect(element.data).to.be.deep.equal([{
           x: -117.16,
           y: 32.71,
           name: 'myName'
@@ -97,22 +97,22 @@
       });
 
       it('other properties are set to default values', function() {
-        expect(component.longitudeProperty).to.equal('x');
-        expect(component.latitudeProperty).to.equal('y');
-        expect(component.textProperty).to.equal('name');
-        expect(component.tileType).to.be.a('String');
-        expect(component.tileUrl).to.be.a('String');
+        expect(element.longitudeProperty).to.equal('x');
+        expect(element.latitudeProperty).to.equal('y');
+        expect(element.textProperty).to.equal('name');
+        expect(element.tileType).to.be.a('String');
+        expect(element.tileUrl).to.be.a('String');
       });
 
       it('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
-        expect(component._hasMultipleLocations).to.be.equal(false);
-        expect(component._hasSingleLocation).to.be.equal(true);
+        expect(element._hasMultipleLocations).to.be.equal(false);
+        expect(element._hasSingleLocation).to.be.equal(true);
       });
 
       it('_getProperty returns the correct values', function() {
-        expect(component._getProperty(0, component.latitudeProperty)).to.equal(32.71);
-        expect(component._getProperty(0, component.longitudeProperty)).to.equal(-117.16);
-        expect(component._getProperty(0, component.textProperty)).to.equal('myName');
+        expect(element._getProperty(0, element.latitudeProperty)).to.equal(32.71);
+        expect(element._getProperty(0, element.longitudeProperty)).to.equal(-117.16);
+        expect(element._getProperty(0, element.textProperty)).to.equal('myName');
       });
     });
   </script>
