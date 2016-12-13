@@ -11,8 +11,9 @@
 A Polymer Element that wraps a leaflet-map.
 
 ### Example
-
-    <leaflet-wrapper data="[[array]]"></leaflet-wrapper>
+```html
+<leaflet-wrapper data="[[array]]"></leaflet-wrapper>
+```
 
 @demo demo/index.html
 -->
@@ -157,6 +158,8 @@ A Polymer Element that wraps a leaflet-map.
 
       properties: {
         /**
+         * (Optional)
+         *
          * The latitude property in the map data.
          *
          * @type {String}
@@ -168,6 +171,8 @@ A Polymer Element that wraps a leaflet-map.
         },
 
         /**
+         * (Optional)
+         *
          * The longitude property in the map data.
          *
          * @type {String}
@@ -179,6 +184,8 @@ A Polymer Element that wraps a leaflet-map.
         },
 
         /**
+         * (Optional)
+         *
          * The text property in the map data.
          *
          * @type {String}
@@ -190,6 +197,8 @@ A Polymer Element that wraps a leaflet-map.
         },
 
         /**
+         * (Required)
+         *
          * The data for the map.
          *
          * @type {Array}
@@ -205,6 +214,8 @@ A Polymer Element that wraps a leaflet-map.
         },
 
         /**
+         * (Optional)
+         *
          * The attribution of the base tile layer.  Note that we combine the attribution for all available tile layers
          * because the polymer leaflet-map library does not update the visible attribution as the property changes.
          *
@@ -217,6 +228,8 @@ A Polymer Element that wraps a leaflet-map.
         },
 
         /**
+         * (Optional)
+         *
          * The type of the base tile layer.
          *
          * @type {String}
@@ -229,6 +242,8 @@ A Polymer Element that wraps a leaflet-map.
         },
 
         /**
+         * (Optional)
+         *
          * The URL of the base tile layer.
          *
          * @type {String}

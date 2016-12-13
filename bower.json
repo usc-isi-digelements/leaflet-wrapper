@@ -7,7 +7,9 @@
   "description": "A Polymer Element that wraps a leaflet-map.",
   "keywords": [
     "web-component",
-    "polymer"
+    "polymer",
+    "leaflet",
+    "leaflet-map"
   ],
   "main": "leaflet-wrapper.html",
   "license": "http://polymer.github.io/LICENSE.txt",
