@@ -16,10 +16,10 @@
   </test-fixture>
 
   <script>
-    describe('leaflet-wrapper test -- if more than one location', function() {
+    suite('leaflet-wrapper test -- if more than one location', function() {
       var element;
 
-      before(function(done) {
+      setup(function(done) {
         element = fixture('leaflet-wrapper-fixture');
         element.data = [{
           latitude: 32.71,
@@ -34,7 +34,7 @@
         });
       });
 
-      it('data is set to input value', function() {
+      test('data is set to input value', function() {
         expect(element.data).to.be.an('Array');
         expect(element.data).to.be.deep.equal([{
           latitude: 32.71,
@@ -46,20 +46,25 @@
         }]);
       });
 
-      it('other properties are set to default values', function() {
+      test('other properties are set to default values', function() {
         expect(element.latitudeProperty).to.equal('latitude');
         expect(element.longitudeProperty).to.equal('longitude');
         expect(element.textProperty).to.equal('text');
+        expect(element.tileAttribution).to.be.a('String');
         expect(element.tileType).to.be.a('String');
         expect(element.tileUrl).to.be.a('String');
       });
 
-      it('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
+      test('imagePath gets set', function() {
+        expect(L.Icon.Default.imagePath).to.be.a('String');
+      });
+
+      test('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
         expect(element._hasMultipleLocations).to.be.equal(true);
         expect(element._hasSingleLocation).to.be.equal(false);
       });
 
-      it('_getProperty returns the correct values', function() {
+      test('_getProperty returns the correct values', function() {
         expect(element._getProperty(0, element.latitudeProperty)).to.equal(32.71);
         expect(element._getProperty(0, element.longitudeProperty)).to.equal(-117.16);
         expect(element._getProperty(0, element.textProperty)).to.equal('myText');
@@ -67,12 +72,57 @@
         expect(element._getProperty(1, element.longitudeProperty)).to.equal(-118.25);
         expect(element._getProperty(1, element.textProperty)).to.not.exist;
       });
+
+      test('correct template exists for multiple locations', function() {
+        var markers = Polymer.dom(element.root).querySelectorAll('leaflet-marker');
+        expect(element.$$('leaflet-map')).to.exist;
+        expect(element.$$('leaflet-map').fitToMarkers).to.be.true;
+        expect(markers.length).to.equal(2);
+        expect(markers[0].latitude).to.equal(32.71);
+        expect(markers[0].longitude).to.equal(-117.16);
+        expect(markers[0].title).to.equal('myText');
+        expect(markers[1].latitude).to.equal(34.05);
+        expect(markers[1].longitude).to.equal(-118.25);
+        expect(markers[1].title).to.equal('');
+      });
+
+      test('leaflet-tilelayer element exists with correct attributes', function() {
+        expect(element.$$('leaflet-tilelayer')).to.exist;
+        expect(element.$$('leaflet-tilelayer').url).to.equal(element.tileUrl);
+        expect(element.$$('leaflet-tilelayer').attribution).to.equal(element.tileAttribution);
+        expect(element.$$('leaflet-tilelayer').getAttribute('nowrap')).to.exist;
+      });
+
+      test('menu buttons exist with correct attributes', function() {
+        expect(element.$$('paper-menu-button')).to.exist;
+        expect(element.$$('paper-menu-button').horizontalAlign).to.exist;
+        expect(element.$$('paper-menu-button').title).to.equal('Select Base Map Layer');
+        expect(element.$$('paper-icon-button')).to.exist;
+        expect(element.$$('paper-icon-button').icon).to.equal('maps:layers');
+      });
+
+      test('correct options exist in menu', function() {
+        var options = Polymer.dom(element.root).querySelectorAll('paper-radio-button');
+        expect(element.$$('paper-radio-group')).to.exist;
+        expect(element.$$('paper-radio-group').selected).to.equal(element.tileType);
+        expect(options.length).to.equal(5);
+        expect(options[0].name).to.equal('Positron');
+        expect(options[0].textContent).to.equal('CartoDB Positron');
+        expect(options[1].name).to.equal('Hydda');
+        expect(options[1].textContent).to.equal('Hydda');
+        expect(options[2].name).to.equal('OpenMapSurfer');
+        expect(options[2].textContent).to.equal('OpenMapSurfer');
+        expect(options[3].name).to.equal('OpenStreetMap');
+        expect(options[3].textContent).to.equal('OpenStreetMap');
+        expect(options[4].name).to.equal('Stamen');
+        expect(options[4].textContent).to.equal('Stamen');
+      });
     });
 
-    describe('leaflet-wrapper test -- if one location', function() {
+    suite('leaflet-wrapper test -- if one location', function() {
       var element;
 
-      before(function(done) {
+      setup(function(done) {
         element = fixture('leaflet-wrapper-fixture');
         element.longitudeProperty = 'x';
         element.latitudeProperty = 'y';
@@ -87,7 +137,7 @@
         });
       });
 
-      it('data is set to input value', function() {
+      test('data is set to input value', function() {
         expect(element.data).to.be.an('Array');
         expect(element.data).to.be.deep.equal([{
           x: -117.16,
@@ -96,23 +146,71 @@
         }]);
       });
 
-      it('other properties are set to default values', function() {
+      test('other properties are set to default values', function() {
         expect(element.longitudeProperty).to.equal('x');
         expect(element.latitudeProperty).to.equal('y');
         expect(element.textProperty).to.equal('name');
+        expect(element.tileAttribution).to.be.a('String');
         expect(element.tileType).to.be.a('String');
         expect(element.tileUrl).to.be.a('String');
       });
 
-      it('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
+      test('imagePath gets set', function() {
+        expect(L.Icon.Default.imagePath).to.be.a('String');
+      });
+
+      test('_hasMultipleLocations and _hasSingleLocation are set to correct values', function() {
         expect(element._hasMultipleLocations).to.be.equal(false);
         expect(element._hasSingleLocation).to.be.equal(true);
       });
 
-      it('_getProperty returns the correct values', function() {
+      test('_getProperty returns the correct values', function() {
         expect(element._getProperty(0, element.latitudeProperty)).to.equal(32.71);
         expect(element._getProperty(0, element.longitudeProperty)).to.equal(-117.16);
         expect(element._getProperty(0, element.textProperty)).to.equal('myName');
+      });
+
+      test('correct template exists for a single locations', function() {
+        expect(element.$$('leaflet-map')).to.exist;
+        expect(element.$$('leaflet-map').latitude).to.equal(32.71);
+        expect(element.$$('leaflet-map').longitude).to.equal(-117.16);
+        expect(element.$$('leaflet-map').fitToMarkers).to.be.false;
+        expect(Polymer.dom(element.root).querySelectorAll('leaflet-marker').length).to.equal(1);
+        expect(element.$$('leaflet-marker').latitude).to.equal(32.71);
+        expect(element.$$('leaflet-marker').longitude).to.equal(-117.16);
+        expect(element.$$('leaflet-marker').title).to.equal('myName');
+      });
+
+      test('leaflet-tilelayer element exists with correct attributes', function() {
+        expect(element.$$('leaflet-tilelayer')).to.exist;
+        expect(element.$$('leaflet-tilelayer').url).to.equal(element.tileUrl);
+        expect(element.$$('leaflet-tilelayer').attribution).to.equal(element.tileAttribution);
+        expect(element.$$('leaflet-tilelayer').getAttribute('nowrap')).to.exist;
+      });
+
+      test('menu buttons exist with correct attributes', function() {
+        expect(element.$$('paper-menu-button')).to.exist;
+        expect(element.$$('paper-menu-button').horizontalAlign).to.exist;
+        expect(element.$$('paper-menu-button').title).to.equal('Select Base Map Layer');
+        expect(element.$$('paper-icon-button')).to.exist;
+        expect(element.$$('paper-icon-button').icon).to.equal('maps:layers');
+      });
+
+      test('correct options exist in menu', function() {
+        var options = Polymer.dom(element.root).querySelectorAll('paper-radio-button');
+        expect(element.$$('paper-radio-group')).to.exist;
+        expect(element.$$('paper-radio-group').selected).to.equal(element.tileType);
+        expect(options.length).to.equal(5);
+        expect(options[0].name).to.equal('Positron');
+        expect(options[0].textContent).to.equal('CartoDB Positron');
+        expect(options[1].name).to.equal('Hydda');
+        expect(options[1].textContent).to.equal('Hydda');
+        expect(options[2].name).to.equal('OpenMapSurfer');
+        expect(options[2].textContent).to.equal('OpenMapSurfer');
+        expect(options[3].name).to.equal('OpenStreetMap');
+        expect(options[3].textContent).to.equal('OpenStreetMap');
+        expect(options[4].name).to.equal('Stamen');
+        expect(options[4].textContent).to.equal('Stamen');
       });
     });
   </script>
