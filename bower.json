@@ -1,7 +1,7 @@
 {
   "name": "leaflet-wrapper",
   "description": "A Polymer Element that wraps a leaflet-map.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [

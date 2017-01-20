@@ -118,6 +118,22 @@ A Polymer Element that wraps a leaflet-map.
       }
     </style>
 
+    <!-- If customIcons exist, define them here -->
+    <template is="dom-repeat" items="{{customIcons}}" as="icon">
+      <leaflet-icon id="{{_getIconProperty(icon, iconIdProperty)}}"
+        icon-url="{{_getIconProperty(icon, iconUrlProperty)}}"
+        icon-width="{{_getIconProperty(icon, iconWidthProperty)}}"
+        icon-height="{{_getIconProperty(icon, iconHeightProperty)}}"
+        icon-anchor-x="{{_getIconProperty(icon, iconAnchorXProperty)}}"
+        icon-anchor-y="{{_getIconProperty(icon, iconAnchorYProperty)}}"
+        popup-anchor-x="{{_getIconProperty(icon, iconPopupAnchorXProperty)}}"
+        popup-anchor-y="{{_getIconProperty(icon, iconPopupAnchorYProperty)}}"
+        shadow-url="{{_getIconProperty(icon, iconShadowUrlProperty)}}"
+        shadow-width="{{_getIconProperty(icon, iconShadowWidthProperty)}}"
+        shadow-height="{{_getIconProperty(icon, iconShadowHeightProperty)}}">
+      </leaflet-icon>
+    </template>
+
     <!-- Need the if/else case since fit-to-markers attribute won't work properly with only one marker/location -->
     <template is="dom-if" if="{{_hasMultipleLocations}}">
       <leaflet-map fit-to-markers>
@@ -128,23 +144,25 @@ A Polymer Element that wraps a leaflet-map.
         </leaflet-tilelayer>
 
         <template is="dom-repeat" items="{{data}}" as="location">
-          <leaflet-marker latitude="[[_getProperty(index, latitudeProperty)]]" longitude="[[_getProperty(index, longitudeProperty)]]" title$="[[_getProperty(index, textProperty, '')]]">
-            [[_getProperty(index, textProperty)]]
+          <leaflet-marker latitude="[[_getDataProperty(index, latitudeProperty)]]" longitude="[[_getDataProperty(index, longitudeProperty)]]"
+            title$="[[_getDataProperty(index, textProperty, '')]]" icon$="[[_getDataProperty(index, iconIdProperty)]]">
+            [[_getDataProperty(index, textProperty)]]
           </leaflet-marker>
         </template>
       </leaflet-map>
     </template>
 
     <template is="dom-if" if="{{_hasSingleLocation}}">
-      <leaflet-map latitude="[[_getProperty(0, latitudeProperty)]]" longitude="[[_getProperty(0, longitudeProperty)]]" zoom="10">
+      <leaflet-map latitude="[[_getDataProperty(0, latitudeProperty)]]" longitude="[[_getDataProperty(0, longitudeProperty)]]" zoom="10">
         <leaflet-tilelayer
           url="[[tileUrl]]"
           attribution="[[tileAttribution]]"
           nowrap>
         </leaflet-tilelayer>
 
-        <leaflet-marker latitude="[[_getProperty(0, latitudeProperty)]]" longitude="[[_getProperty(0, longitudeProperty)]]" title$="[[_getProperty(0, textProperty, '')]]">
-          [[_getProperty(0, textProperty)]]
+        <leaflet-marker latitude="[[_getDataProperty(0, latitudeProperty)]]" longitude="[[_getDataProperty(0, longitudeProperty)]]"
+          title$="[[_getDataProperty(0, textProperty, '')]]" icon$="[[_getDataProperty(0, iconIdProperty)]]">
+          [[_getDataProperty(0, textProperty)]]
         </leaflet-marker>
       </leaflet-map>
     </template>
@@ -227,6 +245,166 @@ A Polymer Element that wraps a leaflet-map.
           },
           notify: true,
           observer: '_onDataChange'
+        },
+
+        /**
+         * (Optional)
+         *
+         * User defined custom icons to mark places on the map. Properties
+         * of each icon object will correspond to attributes of leaflet-icon.
+         *
+         * @type {Array}
+         * @default []
+         */
+        customIcons: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+          notify: true,
+        },
+
+        /**
+         * (Optional)
+         *
+         * The id property in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'iconId'
+         */
+        iconIdProperty: {
+          type: String,
+          value: 'iconId'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The icon url property in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'url'
+         */
+        iconUrlProperty: {
+          type: String,
+          value: 'url'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to use for icon width in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'width'
+         */
+        iconWidthProperty: {
+          type: String,
+          value: 'width'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to use for icon height in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'height'
+         */
+        iconHeightProperty: {
+          type: String,
+          value: 'height'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to be used against the icon-anchor-x attribute in leaflet-icon for custom icon data objects.
+         *
+         * @type {String}
+         * @default 'iconAnchorX'
+         */
+        iconAnchorXProperty: {
+          type: String,
+          value: 'iconAnchorX'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to be used against the icon-anchor-y attribute in leaflet-icon for custom icon data objects.
+         *
+         * @type {String}
+         * @default 'iconAnchorY'
+         */
+        iconAnchorYProperty: {
+          type: String,
+          value: 'iconAnchorY'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to be used against the popup-anchor-x attribute in leaflet-icon for custom icon data objects.
+         *
+         * @type {String}
+         * @default 'popupAnchorX'
+         */
+        iconPopupAnchorXProperty: {
+          type: String,
+          value: 'popupAnchorX'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to be used against the popup-anchor-y attribute in leaflet-icon for custom icon data objects.
+         *
+         * @type {String}
+         * @default 'popupAnchorY'
+         */
+        iconPopupAnchorYProperty: {
+          type: String,
+          value: 'popupAnchorY'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The url property for the shadow in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'shadowUrl'
+         */
+        iconShadowUrlProperty: {
+          type: String,
+          value: 'shadowUrl'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to use for shadow width in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'shadowWidth'
+         */
+        iconShadowWidthProperty: {
+          type: String,
+          value: 'shadowWidth'
+        },
+
+        /**
+         * (Optional)
+         *
+         * The property to use for shadow height in the custom icon data objects.
+         *
+         * @type {String}
+         * @default 'shadowHeight'
+         */
+        iconShadowHeightProperty: {
+          type: String,
+          value: 'shadowHeight'
         },
 
         /**
@@ -348,8 +526,20 @@ A Polymer Element that wraps a leaflet-map.
        * @return
        * @private
        */
-      _getProperty: function(index, property, defaultValue) {
+      _getDataProperty: function(index, property, defaultValue) {
         return this.data[index][property] || defaultValue;
+      },
+
+      /**
+       * Returns the given property for a customIcon.
+       *
+       * @param {Object} customIcon
+       * @param {String} property
+       * @return
+       * @private
+       */
+      _getIconProperty: function(customIcon, property) {
+        return customIcon[property];
       }
     });
   })();
