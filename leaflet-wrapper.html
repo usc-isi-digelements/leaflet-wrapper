@@ -135,7 +135,7 @@ A Polymer Element that wraps a leaflet-map.
     </template>
 
     <!-- Need the if/else case since fit-to-markers attribute won't work properly with only one marker/location -->
-    <template is="dom-if" if="{{_hasMultipleLocations}}">
+    <template is="dom-if" if="{{_hasMultipleLocations}}" restamp="[[restamp]]">
       <leaflet-map fit-to-markers>
         <leaflet-tilelayer
           url="[[tileUrl]]"
@@ -152,7 +152,7 @@ A Polymer Element that wraps a leaflet-map.
       </leaflet-map>
     </template>
 
-    <template is="dom-if" if="{{_hasSingleLocation}}">
+    <template is="dom-if" if="{{_hasSingleLocation}}" restamp="[[restamp]]">
       <leaflet-map latitude="[[_getDataProperty(0, latitudeProperty)]]" longitude="[[_getDataProperty(0, longitudeProperty)]]" zoom="10">
         <leaflet-tilelayer
           url="[[tileUrl]]"
@@ -447,6 +447,19 @@ A Polymer Element that wraps a leaflet-map.
           type: String,
           notify: true,
           value: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'
+        },
+
+        /**
+         * (Optional)
+         *
+         * Whether or not to create/destroy leaflet-map templates when dom-if conditions change.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        restamp: {
+          type: Boolean,
+          value: false
         },
 
         /**
