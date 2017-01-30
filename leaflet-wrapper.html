@@ -22,6 +22,8 @@ limitations under the License.
 <link rel="import" href="../paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../paper-radio-group/paper-radio-group.html">
+<link rel="stylesheet" href="../leaflet.markercluster/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="../leaflet.markercluster/dist/MarkerCluster.Default.css"/>
 
 <!--
 A Polymer Element that wraps a leaflet-map.
@@ -136,24 +138,39 @@ A Polymer Element that wraps a leaflet-map.
 
     <!-- Need the if/else case since fit-to-markers attribute won't work properly with only one marker/location -->
     <template is="dom-if" if="{{_hasMultipleLocations}}" restamp="[[restamp]]">
-      <leaflet-map fit-to-markers>
+      <leaflet-map fit-to-markers max-zoom="17">
         <leaflet-tilelayer
           url="[[tileUrl]]"
           attribution="[[tileAttribution]]"
           nowrap>
         </leaflet-tilelayer>
 
-        <template is="dom-repeat" items="{{data}}" as="location">
-          <leaflet-marker latitude="[[_getDataProperty(index, latitudeProperty)]]" longitude="[[_getDataProperty(index, longitudeProperty)]]"
-            title$="[[_getDataProperty(index, textProperty, '')]]" icon$="[[_getDataProperty(index, iconIdProperty)]]">
-            [[_getDataProperty(index, textProperty)]]
-          </leaflet-marker>
+        <template is="dom-if" if="[[clusterMarkers]]">
+          <leaflet-marker-cluster>
+            <template is="dom-repeat" items="{{data}}" as="location">
+              <leaflet-marker latitude="[[_getDataProperty(index, latitudeProperty)]]" longitude="[[_getDataProperty(index, longitudeProperty)]]"
+                title$="[[_getDataProperty(index, textProperty, '')]]" icon$="[[_getDataProperty(index, iconIdProperty)]]">
+                [[_getDataProperty(index, textProperty)]]
+              </leaflet-marker>
+            </template>
+          </leaflet-marker-cluster>
         </template>
+
+        <template is="dom-if" if="[[!clusterMarkers]]">
+          <template is="dom-repeat" items="{{data}}" as="location">
+            <leaflet-marker latitude="[[_getDataProperty(index, latitudeProperty)]]" longitude="[[_getDataProperty(index, longitudeProperty)]]"
+              title$="[[_getDataProperty(index, textProperty, '')]]" icon$="[[_getDataProperty(index, iconIdProperty)]]">
+              [[_getDataProperty(index, textProperty)]]
+            </leaflet-marker>
+          </template>
+        </template>
+
       </leaflet-map>
     </template>
 
     <template is="dom-if" if="{{_hasSingleLocation}}" restamp="[[restamp]]">
-      <leaflet-map latitude="[[_getDataProperty(0, latitudeProperty)]]" longitude="[[_getDataProperty(0, longitudeProperty)]]" zoom="10">
+      <leaflet-map latitude="[[_getDataProperty(0, latitudeProperty)]]" longitude="[[_getDataProperty(0, longitudeProperty)]]"
+        zoom="10" max-zoom="17">
         <leaflet-tilelayer
           url="[[tileUrl]]"
           attribution="[[tileAttribution]]"
@@ -458,6 +475,19 @@ A Polymer Element that wraps a leaflet-map.
          * @default false
          */
         restamp: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * (Optional)
+         *
+         * Whether or not to cluster markers on default.
+         *
+         * @type {Boolean}
+         * @default false
+         */
+        clusterMarkers: {
           type: Boolean,
           value: false
         },

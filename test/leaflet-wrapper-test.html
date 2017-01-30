@@ -32,7 +32,7 @@ limitations under the License.
   </test-fixture>
 
   <script>
-    suite('leaflet-wrapper test -- if more than one location and customIcons specified', function() {
+    suite('leaflet-wrapper test -- if more than one location, markers are clustered, and customIcons specified', function() {
       var element;
 
       setup(function(done) {
@@ -59,6 +59,7 @@ limitations under the License.
           shadowWidth: 41,
           shadowHeight: 41
         }];
+        element.clusterMarkers = true;
         flush(function() {
           done();
         });
@@ -134,7 +135,7 @@ limitations under the License.
 
       test('correct template exists for multiple locations', function() {
         var icons = Polymer.dom(element.root).querySelectorAll('leaflet-icon');
-        var markers = Polymer.dom(element.root).querySelectorAll('leaflet-marker');
+        var markers = Polymer.dom(element.root).querySelectorAll('leaflet-marker-cluster > leaflet-marker');
         expect(icons.length).to.equal(1);
         expect(icons[0]).to.exist;
         expect(icons[0].id).to.equal('big-icon');
@@ -242,6 +243,7 @@ limitations under the License.
         expect(element.iconShadowWidthProperty).to.equal('shadowWidth');
         expect(element.iconShadowHeightProperty).to.equal('shadowHeight');
         expect(element.restamp).to.equal(false);
+        expect(element.clusterMarkers).to.equal(false);
       });
 
       test('imagePath gets set', function() {
