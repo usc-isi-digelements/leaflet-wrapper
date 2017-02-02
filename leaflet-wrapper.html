@@ -448,7 +448,7 @@ A Polymer Element that wraps a leaflet-map.
          */
         tileType: {
           type: String,
-          value: 'OpenMapSurfer',
+          value: 'OpenStreetMap',
           observer: '_onTileChange'
         },
 
@@ -463,7 +463,7 @@ A Polymer Element that wraps a leaflet-map.
         tileUrl: {
           type: String,
           notify: true,
-          value: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}'
+          value: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         },
 
         /**
