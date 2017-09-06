@@ -17,8 +17,9 @@ limitations under the License.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-icons/maps-icons.html">
 <link rel="import" href="../leaflet-map/leaflet-map.html">
+<link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
 <link rel="import" href="../paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../paper-radio-group/paper-radio-group.html">
@@ -29,8 +30,20 @@ limitations under the License.
 A Polymer Element that wraps a leaflet-map.
 
 ### Example
+```js
+var data = [{
+  latitude: 38.882222,
+  longitude: -77.171111,
+  text: 'Falls Church, VA'
+}, {
+  latitude: 39.203611,
+  longitude: -76.856944,
+  text: "Columbia, MD"
+}];
+```
+
 ```html
-<leaflet-wrapper data="[[array]]"></leaflet-wrapper>
+<leaflet-wrapper data="[[data]]"></leaflet-wrapper>
 ```
 
 @demo demo/index.html
@@ -53,38 +66,6 @@ A Polymer Element that wraps a leaflet-map.
         right: 0;
       }
 
-      leaflet-map ::content .leaflet-container .leaflet-control-attribution {
-        opacity: 0.5;
-        transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      leaflet-map ::content .leaflet-container .leaflet-control-attribution:hover {
-        opacity: 1;
-      }
-
-      leaflet-map ::content .leaflet-bar {
-        box-shadow:
-          1px 2px 3px 0 rgba(0, 0, 0, 0.14),
-          1px 1px 6px 0 rgba(0, 0, 0, 0.12),
-          1px 3px 2px -2px rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-      }
-
-      leaflet-map ::content .leaflet-bar a,
-      leaflet-map ::content .leaflet-bar a:hover {
-        color: var(--secondary-text-color);
-      }
-
-      leaflet-map ::content .leaflet-bar a:first-child {
-        border-top-left-radius: 2px;
-        border-top-right-radius: 2px;
-      }
-
-      leaflet-map ::content .leaflet-bar a:last-child {
-        border-bottom-left-radius: 2px;
-        border-bottom-right-radius: 2px;
-      }
-
       paper-menu-button {
         padding: 0;
         position: absolute;
@@ -105,12 +86,7 @@ A Polymer Element that wraps a leaflet-map.
         border-radius: 2px;
       }
 
-      paper-icon-button::shadow #icon {
-        height: 16px;
-        width: 16px;
-      }
-
-      paper-menu {
+      paper-listbox {
         padding: 0;
       }
 
@@ -185,8 +161,8 @@ A Polymer Element that wraps a leaflet-map.
     </template>
 
     <paper-menu-button horizontal-align="right" title="Select Base Map Layer">
-      <paper-icon-button icon="maps:layers" class="dropdown-trigger"></paper-icon-button>
-      <paper-menu class="dropdown-content">
+      <paper-icon-button icon="maps:layers" slot="dropdown-trigger"></paper-icon-button>
+      <paper-listbox slot="dropdown-content">
         <paper-radio-group selected="{{tileType}}">
           <paper-radio-button name="Positron">CartoDB Positron</paper-radio-button>
           <paper-radio-button name="Hydda">Hydda</paper-radio-button>
@@ -194,7 +170,7 @@ A Polymer Element that wraps a leaflet-map.
           <paper-radio-button name="OpenStreetMap">OpenStreetMap</paper-radio-button>
           <paper-radio-button name="Stamen">Stamen</paper-radio-button>
         </paper-radio-group>
-      </paper-menu>
+      </paper-listbox>
     </paper-menu-button>
   </template>
 

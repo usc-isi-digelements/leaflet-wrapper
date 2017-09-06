@@ -1,7 +1,7 @@
 {
   "name": "leaflet-wrapper",
   "description": "A Polymer Element that wraps a leaflet-map.",
-  "version": "1.0.7",
+  "version": "2.0.0",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
@@ -11,20 +11,24 @@
     "leaflet-map"
   ],
   "main": "leaflet-wrapper.html",
-  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/DigElements/leaflet-wrapper/",
   "ignore": [
     "/.*",
     "/test/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.7.0",
-    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
-    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
-    "leaflet-map": "DigElements/leaflet-map#^1.4.0"
+    "polymer": "Polymer/polymer#^2.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^2.0.0",
+    "leaflet-map": "DigElements/leaflet-map#^2.1.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
+    "paper-listbox": "PolymerElements/paper-listbox#^2.0.0",
+    "paper-menu-button": "PolymerElements/paper-menu-button#^2.0.0",
+    "paper-radio-button": "PolymerElements/paper-radio-button#^2.0.0",
+    "paper-radio-group": "PolymerElements/paper-radio-group#^2.0.0",
+    "web-animations-js": "web-animations/web-animations-js#^2.2"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
-    "web-component-tester": "^5.0.0"
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
+    "web-component-tester": "^6.0.0"
   }
 }

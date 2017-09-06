@@ -1,10 +1,22 @@
 # leaflet-wrapper
 
-A Polymer Element that wraps a [leaflet-map](https://github.com/leaflet-extras/leaflet-map).
+A Polymer Element that wraps a [leaflet-map](https://github.com/DigElements/leaflet-map).
 
 ### Example
+```js
+var data = [{
+  latitude: 38.882222,
+  longitude: -77.171111,
+  text: 'Falls Church, VA'
+}, {
+  latitude: 39.203611,
+  longitude: -76.856944,
+  text: "Columbia, MD"
+}];
+```
+
 ```html
-<leaflet-wrapper data="[[array]]"></leaflet-wrapper>
+<leaflet-wrapper data="[[data]]"></leaflet-wrapper>
 ```
 
 ### Dependencies
