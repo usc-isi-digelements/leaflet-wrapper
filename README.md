@@ -1,6 +1,6 @@
 # leaflet-wrapper
 
-A Polymer Element that wraps a [leaflet-map](https://github.com/DigElements/leaflet-map).
+A Polymer Element that wraps a [leaflet-map](https://github.com/usc-isi-digelements/leaflet-map).
 
 ### Example
 ```js
